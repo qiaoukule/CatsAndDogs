@@ -1,0 +1,12 @@
+.header {
+    background-color: #333333;
+}
+
+.title {
+    color: aliceblue;
+    font-size: 1.6rem;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
