@@ -1,5 +1,8 @@
 import Head from 'next/head'
 import Header from '../components/Header'
+import Author from '../components/Author'
+import Advert from '../components/Advert'
+import Footer from '../components/Footer'
 import styles from '../styles/pages/index.module.css'
 import { Row, Col, List, Icon } from 'antd'
 import React, { useState } from 'react'
@@ -25,7 +28,7 @@ export default function Home() {
       <Header />
 
         <Row type="flex" justify="center">
-        <Col xs={24} sm={24} md={16} lg={18} xl={15}  >
+        <Col xs={24} sm={24} md={15} lg={15} xl={15}  >
           <div className={styles.leftDiv}>
             <List
               header={<div>最新动态</div>}
@@ -48,10 +51,15 @@ export default function Home() {
           </div>
         </Col>
 
-        <Col className="comm-right" xs={0} sm={0} md={7} lg={5} xl={9}>
-          右侧
+        <Col className="comm-right" xs={0} sm={0} md={9} lg={9} xl={9}>
+          <Author/>
+          <Advert/>
       </Col>
       </Row>
+
+      <div>
+          <Footer/>
+      </div>
 
     </div>
   )
