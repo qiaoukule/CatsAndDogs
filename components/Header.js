@@ -12,7 +12,7 @@ const Header = () => (
             <Col xs={0} sm={0} md={16} lg={16} xl={20}>
                 <Menu mode="horizontal" style={{backgroundColor: "#333333",color: "white"}}>
                     <Menu.Item key="home">首页</Menu.Item>
-                    <Menu.Item key="adopt">领养</Menu.Item>
+                    <Menu.Item key="adopt">大赏</Menu.Item>
                     <Menu.Item key="about">动态</Menu.Item>
                 </Menu>
             </Col>

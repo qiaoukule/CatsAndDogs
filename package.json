@@ -17,9 +17,11 @@
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "antd": "^4.10.2",
+    "markdown-navbar": "^1.4.3",
     "next": "10.0.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-markdown": "^5.0.3",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
