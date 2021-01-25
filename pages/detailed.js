@@ -7,25 +7,36 @@ import styles from '../styles/pages/index.module.css'
 import detailedStyles from '../styles/pages/detailed.module.css'
 import { Row, Col, Input, Affix } from 'antd'
 import React, { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import MarkNav from 'markdown-navbar';
-import 'markdown-navbar/dist/navbar.css';
+import MarkNav from 'markdown-navbar'
+import 'markdown-navbar/dist/navbar.css'
+import axios from 'axios'
+import marked from 'marked'
+import hljs from "highlight.js"
+import 'highlight.js/styles/monokai-sublime.css'
 
 
-export default function Detailed() {
+export default function Detailed(props) {
     const { TextArea } = Input;
+    const renderer = new marked.Renderer();
 
+     marked.setOptions({
+        renderer: renderer,
+        gfm: true,
+        pedantic: false,
+        sanitize: false,
+        tables: true,
+        breaks:false,
+        highlight: function(code) {
+            return hljs.highlightAuto(code).value;
+        }
+    });
+    let html = marked(props.article_content)  
+    console.log(props)
+
+   
     const [myList, setList] = useState(
-        [
-            { title: '让小动物温暖过冬', context: '我们在这个寒冷地季节，救助了0只动物，让他们拥有了温暖的小窝和伙伴，期待您的那份温暖！' },
-            { title: '流浪之家成立2天纪念日', context: '我昨天才开始为此站点敲代码，所以今天是流浪之家成立2日纪念日！' },
-            { title: '世界动物日：保护野生动物，刻不容缓', context: '“世界动物日” (World Animal Day)，是每年的10月4日 ，源自12世纪意大利天主教修道士圣方济各的倡议。' },
-            { title: '推荐一款游戏——动物餐厅', context: '除了摩尔庄园，我最爱的游戏，真的超级可爱！空闲时间都去赚小鱼干去了~' },
-        ]
+        props
     )
-
-
-
 
     return (
         <div>
@@ -38,14 +49,10 @@ export default function Detailed() {
             <Row type="flex" justify="center">
                 <Col xs={24} sm={24} md={15} lg={15} xl={15}  >
                     <div className={styles.leftDiv}>
-                        <div className={detailedStyles.detailedDiv}>
-
-                            <ReactMarkdown
-                                escapeHtml={false}
-                            >
-                                # Hello, *world*
-            </ReactMarkdown>
-
+                        <div>
+                        <div className={detailedStyles.detailedDiv}
+                          dangerouslySetInnerHTML={{__html:html}}
+                        ></div>
                             <div>
                                 <h2>留言</h2>
                                 <h4>Your email address will not be published. Required fields are marked *</h4>
@@ -83,4 +90,21 @@ export default function Detailed() {
 
         </div>
     )
+}
+
+Detailed.getInitialProps = async(context)=>{
+    let id = context.query.id//接受id进行查询
+    const promise = new Promise((resolve)=>{
+        axios('http://127.0.0.1:7001/default/getArticleById/'+id).then(
+            (res)=>{
+                console.log(res);
+                resolve(res.data.data[0])
+            }
+        ).catch(
+            (err)=>{
+                console.log(err);
+            }
+        )
+    })
+    return await promise
 }
