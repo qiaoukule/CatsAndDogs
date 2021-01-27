@@ -37,9 +37,27 @@ class HomeController extends Controller {
               'FROM article LEFT JOIN type ON article.type_id = type.id '  +
               'WHERE article.id =' + id
     const result = await this.app.mysql.query(sql)
-
     this.ctx.body = {data:result}
+  }
 
+  async getTypeInfo() {//导航接口：暂时没用上
+    const result = await this.app.mysql.select('type');
+    this.ctx.body = {data:result} //对象
+  }
+
+  async getListById() {
+    let id = this.ctx.params.id
+    let sql = 'SELECT article.id as id, '+
+    'article.title as title, ' +
+    'article.introduce as introduce, ' +
+    'article.addTime as addTime, ' +
+    'article.view_count as view_count, ' +
+    'article.article_content as article_content, '+
+    'type.typeName as typeName ' +
+    'FROM article LEFT JOIN type ON article.type_id = type.id '  +
+    'WHERE type_id =' + id
+    const result = await this.app.mysql.query(sql)
+    this.ctx.body = {data:result}
   }
 }
 

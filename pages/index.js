@@ -4,24 +4,23 @@ import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import styles from '../styles/pages/index.module.css'
-import { Row, Col, List, Icon } from 'antd'
+import { Row, Col, List, Button } from 'antd'
+import {EditOutlined, BulbOutlined,FireOutlined } from '@ant-design/icons';
 import React, { useState } from 'react'
 import axios from 'axios'
 import Link from 'next/link'
-
-
+import servicePath from '../pages/api/apiUrl'
 
 export default function Home(list) {
 
   const [myList, setList] = useState(
-   /* [
-      { title: '让小动物温暖过冬', context: '我们在这个寒冷地季节，救助了0只动物，让他们拥有了温暖的小窝和伙伴，期待您的那份温暖！' },
-      { title: '流浪之家成立2天纪念日', context: '我昨天才开始为此站点敲代码，所以今天是流浪之家成立2日纪念日！' },
-      { title: '世界动物日：保护野生动物，刻不容缓', context: '“世界动物日” (World Animal Day)，是每年的10月4日 ，源自12世纪意大利天主教修道士圣方济各的倡议。' },
-      { title: '推荐一款游戏——动物餐厅', context: '除了摩尔庄园，我最爱的游戏，真的超级可爱！空闲时间都去赚小鱼干去了~' },
-    ]*/
     list.data
   )
+  /*样式搞定*/ 
+   const [buttonStyle, setButtonStyle] = useState(
+    styles.ButtonOut
+  ) 
+
 
   return (
     <div>
@@ -43,15 +42,22 @@ export default function Home(list) {
                   <div className={styles.ListDiv}>
                   <div className={styles.listTitle}>
                     <Link href={{pathname: '/detailed',query:{id:item.id}}}>
-                      <a> {item.title} </a>
+                      <a className={styles.linkStyle}> {item.title} </a>
                     </Link>
                   </div>
                   <div className={styles.listIcon}>
-                    <span><Icon type="calendar" /> {item.addTime}</span>
-                    <span><Icon type="folder" /> 不定期更新</span>
-                    <span><Icon type="fire" /> {item.view_count}</span>
+                    <span ><EditOutlined /> {item.addTime}</span>
+                    <span><BulbOutlined /> 不定期更新</span>
+                    <span><FireOutlined /> 浏览次数：{item.view_count}</span>
                   </div>
                   <div className={styles.listContext}>{item.introduce}</div>
+                  <div className={styles.ButtonDiv}>
+                     <Button className={buttonStyle}>
+                     <Link href={{pathname: '/detailed',query:{id:item.id}}}>
+                      <a className={styles.linkStyle}>阅 读  -{'>'} </a>
+                    </Link>
+                     </Button>
+                  </div>
                   </div>
                 </List.Item>
               )}
@@ -76,7 +82,7 @@ export default function Home(list) {
 //从接口获取数据,这个方法获取的数据可以直接用参数传进去用
 Home.getInitialProps = async ()=> {
   const promise = new Promise((resolve)=>{
-    axios('http://127.0.0.1:7001/default/getArticleList').then(
+    axios(servicePath.getArticleList).then(
       (res)=>{
         resolve(res.data)
       }

@@ -13,27 +13,29 @@ import axios from 'axios'
 import marked from 'marked'
 import hljs from "highlight.js"
 import 'highlight.js/styles/monokai-sublime.css'
+import servicePath from '../pages/api/apiUrl'
+import {EditOutlined, BulbOutlined,FireOutlined } from '@ant-design/icons';
 
 
 export default function Detailed(props) {
     const { TextArea } = Input;
     const renderer = new marked.Renderer();
 
-     marked.setOptions({
+    marked.setOptions({
         renderer: renderer,
         gfm: true,
         pedantic: false,
         sanitize: false,
         tables: true,
-        breaks:false,
-        highlight: function(code) {
+        breaks: false,
+        highlight: function (code) {
             return hljs.highlightAuto(code).value;
         }
     });
-    let html = marked(props.article_content)  
+    let html = marked(props.article_content)
     console.log(props)
 
-   
+
     const [myList, setList] = useState(
         props
     )
@@ -49,24 +51,33 @@ export default function Detailed(props) {
             <Row type="flex" justify="center">
                 <Col xs={24} sm={24} md={15} lg={15} xl={15}  >
                     <div className={styles.leftDiv}>
-                        <div>
-                        <div className={detailedStyles.detailedDiv}
-                          dangerouslySetInnerHTML={{__html:html}}
-                        ></div>
-                            <div>
-                                <h2>留言</h2>
-                                <h4>Your email address will not be published. Required fields are marked *</h4>
-                                <h3>Comment</h3>
-                                <TextArea rows={4} />
-                                <h3>Name*</h3>
-                                <Input />
-                                <h3>Email*</h3>
-                                <Input />
-                                <h3>Website</h3>
-                                <Input />
+                        {/* 文章内容 */}
+                        <div className={detailedStyles.articleDiv}>
+                            <div className={styles.listTitle}>{props.title}</div>
+                            <div className={styles.listIcon}>
+                                <span ><EditOutlined /> {props.addTime}</span>
+                                <span><BulbOutlined /> 不定期更新</span>
+                                <span><FireOutlined /> 浏览次数：{props.view_count}</span>
                             </div>
+                            <div
+                                dangerouslySetInnerHTML={{ __html: html }}
+                            ></div>
+                        </div>
+                        {/* 留言板 */}
+                        <div className={detailedStyles.articleDiv}>
+                            <h2>留言</h2>
+                            <h4>Your email address will not be published. Required fields are marked *</h4>
+                            <h3>Comment</h3>
+                            <TextArea rows={4} />
+                            <h3>Name*</h3>
+                            <Input />
+                            <h3>Email*</h3>
+                            <Input />
+                            <h3>Website</h3>
+                            <Input />
                         </div>
                     </div>
+
                 </Col>
 
                 <Col className="comm-right" xs={0} sm={0} md={9} lg={9} xl={9}>
@@ -92,16 +103,16 @@ export default function Detailed(props) {
     )
 }
 
-Detailed.getInitialProps = async(context)=>{
-    let id = context.query.id//接受id进行查询
-    const promise = new Promise((resolve)=>{
-        axios('http://127.0.0.1:7001/default/getArticleById/'+id).then(
-            (res)=>{
+Detailed.getInitialProps = async (context) => {
+    let id = context.query.id//接受路由传过来的id进行查询
+    const promise = new Promise((resolve) => {
+        axios(servicePath.getArticleById + id).then(
+            (res) => {
                 console.log(res);
                 resolve(res.data.data[0])
             }
         ).catch(
-            (err)=>{
+            (err) => {
                 console.log(err);
             }
         )
